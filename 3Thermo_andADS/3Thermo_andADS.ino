@@ -2,7 +2,9 @@
 #include <Wire.h>
 #include <Adafruit_ADS1X15.h>
 
-// SPI pins for MAX31855
+// SPI pin for MAX31855
+// Cek perubahan
+// cek perubahan kedua
 #define MAXDO   19  // MISO
 #define MAXCLK  18  // SCK
 #define MAXCS1  5
