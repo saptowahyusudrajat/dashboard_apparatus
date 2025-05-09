@@ -1,0 +1,1354 @@
+[
+    {
+        "id": "028400f082bfa284",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7bbe046636920a61",
+        "type": "serial in",
+        "z": "028400f082bfa284",
+        "name": "ESP32 Serial",
+        "serial": "312f5e127a06f902",
+        "x": 815.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [
+                "35496f0ead11b694",
+                "55105bfdf8d3bfd6"
+            ]
+        ]
+    },
+    {
+        "id": "35496f0ead11b694",
+        "type": "function",
+        "z": "028400f082bfa284",
+        "name": "Parse Sensor Data",
+        "func": "let line = msg.payload;\nlet parts = line.split(',');\nlet data = {};\n\nfor (let part of parts) {\n    let pair = part.split(':');\n    if (pair.length === 2) {\n        let key = pair[0].trim();\n        let value = parseFloat(pair[1].trim());\n        data[key] = value;\n    }\n}\n\nnode.warn(data);  // Log the parsed data to the debug window\n\nlet msgs = [];\nfor (let key in data) {\n    msgs.push({\n        payload: data[key],\n        topic: key\n    });\n}\n\nreturn [msgs];\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 80,
+        "wires": [
+            [
+                "14bdd7eebd342f34"
+            ]
+        ]
+    },
+    {
+        "id": "14bdd7eebd342f34",
+        "type": "switch",
+        "z": "028400f082bfa284",
+        "name": "Route by Sensor",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "flow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pressure",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_5",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 7,
+        "x": 1235.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [
+                "4baac9441a6284b4",
+                "8f968a2e4f5da270"
+            ],
+            [
+                "ef1667369246f763",
+                "3908fb1c78dc9c83"
+            ],
+            [
+                "8348adb9f98da6bf",
+                "8c359f0ba2dcdf33"
+            ],
+            [
+                "b404cca741dc08ac",
+                "de1189cf05240fd1"
+            ],
+            [
+                "acc5a166d8f8428c",
+                "1dd073b04f565467"
+            ],
+            [
+                "585e1a3225b5db11",
+                "42682bddab4cb27e"
+            ],
+            [
+                "108ab3f5b827184b",
+                "719ba196bfe42936"
+            ]
+        ]
+    },
+    {
+        "id": "4baac9441a6284b4",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Flow Gauge",
+        "group": "charts",
+        "order": 1,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Flow (L/min)",
+        "label": "L/min",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 100,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1650,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "8f968a2e4f5da270",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Flow Chart",
+        "group": "charts",
+        "order": 2,
+        "width": 13,
+        "height": 7,
+        "label": "Flow (L/min)",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff0000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1650,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ef1667369246f763",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Pressure",
+        "group": "26fac49d1f498eb4",
+        "order": 1,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Pressure",
+        "label": "bar",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1720,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "3908fb1c78dc9c83",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Pressure",
+        "group": "26fac49d1f498eb4",
+        "order": 2,
+        "width": 13,
+        "height": 7,
+        "label": "Pressure",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#4dff00",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1720,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8348adb9f98da6bf",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 1",
+        "group": "20360c9e681dfa0c",
+        "order": 1,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Thermocouple 1",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "800",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1780,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "8c359f0ba2dcdf33",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 1",
+        "group": "20360c9e681dfa0c",
+        "order": 2,
+        "width": 13,
+        "height": 5,
+        "label": "Thermocoouple 1",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "800",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00b3ff",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1760,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b404cca741dc08ac",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 2",
+        "group": "20360c9e681dfa0c",
+        "order": 6,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Thermocouple 2",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "800",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1780,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "de1189cf05240fd1",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Thermocoouple 2",
+        "group": "20360c9e681dfa0c",
+        "order": 7,
+        "width": 13,
+        "height": 5,
+        "label": "Thermocoouple 2",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "800",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ffdd00",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1790,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "acc5a166d8f8428c",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 3",
+        "group": "20360c9e681dfa0c",
+        "order": 11,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Thermocouple 3",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "800",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1760,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "1dd073b04f565467",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Thermocoouple 3",
+        "group": "20360c9e681dfa0c",
+        "order": 12,
+        "width": 13,
+        "height": 5,
+        "label": "Thermocoouple 3",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "800",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#990099",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1770,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f4736c41acf3f4bd",
+        "type": "ui_button",
+        "z": "028400f082bfa284",
+        "name": "",
+        "group": "3ecb684841515101",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "CLEAR CHART",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 960,
+        "y": 320,
+        "wires": [
+            [
+                "d611ef3fb343a0d1"
+            ]
+        ]
+    },
+    {
+        "id": "d611ef3fb343a0d1",
+        "type": "function",
+        "z": "028400f082bfa284",
+        "name": "function 1",
+        "func": "if (msg.payload.length === 0) {\n    // Send a message to clear the graph data\n    return { payload: [] }; // Clear the graph by sending an empty array\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 320,
+        "wires": [
+            [
+                "1dd073b04f565467",
+                "8f968a2e4f5da270",
+                "de1189cf05240fd1",
+                "8c359f0ba2dcdf33",
+                "3908fb1c78dc9c83",
+                "42682bddab4cb27e",
+                "719ba196bfe42936"
+            ]
+        ]
+    },
+    {
+        "id": "585e1a3225b5db11",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 4",
+        "group": "20360c9e681dfa0c",
+        "order": 16,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Thermocouple 4",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "800",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1760,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "42682bddab4cb27e",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 4",
+        "group": "20360c9e681dfa0c",
+        "order": 17,
+        "width": 13,
+        "height": 5,
+        "label": "Thermocouple 4",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "800",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ffda1f",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1760,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "108ab3f5b827184b",
+        "type": "ui_gauge",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 5",
+        "group": "20360c9e681dfa0c",
+        "order": 21,
+        "width": 5,
+        "height": 2,
+        "gtype": "gage",
+        "title": "Thermocouple 5",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "800",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1760,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "719ba196bfe42936",
+        "type": "ui_chart",
+        "z": "028400f082bfa284",
+        "name": "Thermocouple 5",
+        "group": "20360c9e681dfa0c",
+        "order": 22,
+        "width": 13,
+        "height": 5,
+        "label": "Thermocouple 5",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "800",
+        "removeOlder": 1,
+        "removeOlderPoints": "60",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ffde85",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1760,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5b6bf06cddae3c4f",
+        "type": "ui_switch",
+        "z": "028400f082bfa284",
+        "name": "Logging Toggle",
+        "label": "Logging",
+        "tooltip": "Enable/Disable Logging",
+        "group": "3ecb684841515101",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "set_logging",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 880,
+        "y": 540,
+        "wires": [
+            [
+                "ef79a4b8adbe07dc"
+            ]
+        ]
+    },
+    {
+        "id": "62506ea4e60b6d73",
+        "type": "inject",
+        "z": "028400f082bfa284",
+        "name": "Enable Logging",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "set_logging",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 850,
+        "y": 660,
+        "wires": [
+            [
+                "ef79a4b8adbe07dc"
+            ]
+        ]
+    },
+    {
+        "id": "4cbd273d56b06a4e",
+        "type": "inject",
+        "z": "028400f082bfa284",
+        "name": "Disable Logging",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "set_logging",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 850,
+        "y": 700,
+        "wires": [
+            [
+                "ef79a4b8adbe07dc"
+            ]
+        ]
+    },
+    {
+        "id": "ef79a4b8adbe07dc",
+        "type": "change",
+        "z": "028400f082bfa284",
+        "name": "Set Logging Flag",
+        "rules": [
+            {
+                "t": "set",
+                "p": "loggingEnabled",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 1170,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "55105bfdf8d3bfd6",
+        "type": "switch",
+        "z": "028400f082bfa284",
+        "name": "Check Logging Enabled",
+        "property": "loggingEnabled",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 790,
+        "y": 760,
+        "wires": [
+            [
+                "37c47bb7f9d79a43"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "37c47bb7f9d79a43",
+        "type": "function",
+        "z": "028400f082bfa284",
+        "name": "Format to CSV",
+        "func": "// Define fixed order of fields\nconst fieldOrder = [\n    \"flow\", \"pressure\",\n    \"temperature_1\", \"temperature_2\", \"temperature_3\",\n    \"temperature_4\", \"temperature_5\"\n];\n\nconst now = new Date();\nconst yyyy = now.getFullYear();\nconst mm = String(now.getMonth() + 1).padStart(2, '0');\nconst dd = String(now.getDate()).padStart(2, '0');\nconst hh = String(now.getHours()).padStart(2, '0');\nconst min = String(now.getMinutes()).padStart(2, '0');\nconst sec = String(now.getSeconds()).padStart(2, '0');\n\nconst timestamp = `${yyyy}-${mm}-${dd} ${hh}:${min}:${sec}`;\nconst filename = `C:\\\\logs\\\\log-${yyyy}-${mm}-${dd}.csv`;\n\n// Parse the key:value input into an object\nconst keyValuePairs = msg.payload.toString().split(\",\");\nlet data = {};\nkeyValuePairs.forEach(pair => {\n    let [key, value] = pair.split(\":\");\n    data[key.trim()] = value.trim();\n});\n\n// Build CSV row in proper order\nconst values = [timestamp, ...fieldOrder.map(f => data[f] || \"\")];\nmsg.payload = values.join(\",\") + \"\\n\";\nmsg.filename = filename;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 760,
+        "wires": [
+            [
+                "1e2c4131095a5410"
+            ]
+        ]
+    },
+    {
+        "id": "1e2c4131095a5410",
+        "type": "file",
+        "z": "028400f082bfa284",
+        "name": "Save to CSV File",
+        "filename": "",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1380,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dacfb699ca7505ad",
+        "type": "ui_slider",
+        "z": "028400f082bfa284",
+        "name": "",
+        "label": "Valve Opening",
+        "tooltip": "",
+        "group": "da20fba7a1cd8b67",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "className": "",
+        "x": 220,
+        "y": 340,
+        "wires": [
+            [
+                "d48aa0ebf4a1554f"
+            ]
+        ]
+    },
+    {
+        "id": "d48aa0ebf4a1554f",
+        "type": "function",
+        "z": "028400f082bfa284",
+        "name": "Format %",
+        "func": "msg.payload = msg.payload + \"%\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 340,
+        "wires": [
+            [
+                "d87d1932b77436ef"
+            ]
+        ]
+    },
+    {
+        "id": "d87d1932b77436ef",
+        "type": "ui_text",
+        "z": "028400f082bfa284",
+        "group": "da20fba7a1cd8b67",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Current Value",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 600,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "6e60f9a0660c210c",
+        "type": "ui_button",
+        "z": "028400f082bfa284",
+        "name": "",
+        "group": "da20fba7a1cd8b67",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Set Valve",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "x": 220,
+        "y": 420,
+        "wires": [
+            [
+                "fc0ee11d5c94f8c5"
+            ]
+        ]
+    },
+    {
+        "id": "fc0ee11d5c94f8c5",
+        "type": "function",
+        "z": "028400f082bfa284",
+        "name": "Send slider value",
+        "func": "msg.payload = flow.get(\"valveValue\") || 0;\nmsg.payload = msg.payload.toString() + \"\\n\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 420,
+        "wires": [
+            [
+                "e8d5ea34d694783e"
+            ]
+        ]
+    },
+    {
+        "id": "72ed6b0479684b4f",
+        "type": "function",
+        "z": "028400f082bfa284",
+        "name": "Save to flow",
+        "func": "flow.set(\"valveValue\", msg.payload);\nreturn null;",
+        "outputs": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e8d5ea34d694783e",
+        "type": "serial out",
+        "z": "028400f082bfa284",
+        "name": "Send to Serial",
+        "serial": "a21c8553ab2bf0cb",
+        "x": 610,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "52e30f73edebed2d",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 3,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "c2144379f4244fb7",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 4,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "b6a303a4359040c3",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 5,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "6bf9605659c2f865",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 8,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "82a62a14593bd160",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 9,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "e8af1f966e3e225f",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 10,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "dee3a51250620aac",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 13,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "2645e70adb181ab9",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 14,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "7106a129a29d52ec",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 15,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "752094c6a8b2eb73",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 18,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "3f9e0f8d05ee9c64",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 19,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "df51c9762e7d7456",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 20,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "aca2950c21416db9",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 23,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "e6aff137aa0b6b15",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 24,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "5d0e8fbccb3fda31",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 25,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "c736368af49265e5",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "charts",
+        "order": 3,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "10578fa4c2a52bba",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "charts",
+        "order": 4,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "c4141244e92398c0",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "charts",
+        "order": 5,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "8dd2ecf44a1e88e8",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "charts",
+        "order": 6,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "a1be80e704aead93",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "charts",
+        "order": 7,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "dc71512db3801fad",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 3,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "ba6e75d0025f4e58",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 4,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "c012fff8f65da572",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 5,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "dd0546fe155d29b6",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 6,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "1eeffaec01477b42",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 7,
+        "width": 5,
+        "height": 1
+    },
+    {
+        "id": "e9ae0523e3ce98a0",
+        "type": "ui_spacer",
+        "z": "028400f082bfa284",
+        "name": "spacer",
+        "group": "3ecb684841515101",
+        "order": 2,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "312f5e127a06f902",
+        "type": "serial-port",
+        "name": "esp32",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "charts",
+        "type": "ui_group",
+        "name": "FLOW",
+        "tab": "dashboard-tab",
+        "order": 2,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "26fac49d1f498eb4",
+        "type": "ui_group",
+        "name": "PRESSURE",
+        "tab": "dashboard-tab",
+        "order": 3,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "20360c9e681dfa0c",
+        "type": "ui_group",
+        "name": "TEMPERATURE",
+        "tab": "dashboard-tab",
+        "order": 1,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3ecb684841515101",
+        "type": "ui_group",
+        "name": "DATA CONTROL",
+        "tab": "dashboard-tab",
+        "order": 4,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "da20fba7a1cd8b67",
+        "type": "ui_group",
+        "name": "VALVE CONTROL",
+        "tab": "dashboard-tab",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "a21c8553ab2bf0cb",
+        "type": "serial-port",
+        "serialport": "COM99",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "dashboard-tab",
+        "type": "ui_tab",
+        "name": "Hydrogen Apparatus Monitoring",
+        "icon": "fa-fire",
+        "order": 2,
+        "disabled": true,
+        "hidden": true
+    }
+]
