@@ -67,9 +67,9 @@ void read4to20mA(uint8_t channel) {
 
 void loop() {
   Serial.println("\n--- Thermocouples ---");
-  readThermo("Sensor 1", thermocouple1);
-  readThermo("Sensor 2", thermocouple2);
-  readThermo("Sensor 3", thermocouple3);
+  //readThermo("Sensor 1", thermocouple1);
+  re//adThermo("Sensor 2", thermocouple2);
+  //readThermo("Sensor 3", thermocouple3);
 
   Serial.println("\n--- ADS1115 Analog Inputs (4–20 mA Mapping) ---");
   for (int i = 0; i < 4; i++) {
