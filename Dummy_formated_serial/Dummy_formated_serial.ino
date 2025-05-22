@@ -74,8 +74,8 @@ void sendSensorData() {
                 ",temperature_2:" + String(temp2, 1) +
                 ",temperature_3:" + String(temp3, 1) +
                 ",temperature_4:" + String(temp4, 1) +
-                ",temperature_5:" + String(temp5, 1);
-                //",slider:" + String(sliderValue);
+                ",temperature_5:" + String(temp5, 1) +
+                ",slider:" + String(sliderValue);
                 
   Serial.println(data);
 }

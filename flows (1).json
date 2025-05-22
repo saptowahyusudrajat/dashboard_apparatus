@@ -1,0 +1,38 @@
+[
+    {
+        "id": "7bbe046636920a61",
+        "type": "serial in",
+        "z": "028400f082bfa284",
+        "name": "ESP32 Serial",
+        "serial": "312f5e127a06f902",
+        "x": 815.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [
+                "35496f0ead11b694",
+                "55105bfdf8d3bfd6",
+                "parse_function"
+            ]
+        ]
+    },
+    {
+        "id": "312f5e127a06f902",
+        "type": "serial-port",
+        "name": "esp32",
+        "serialport": "COM65",
+        "serialbaud": "9600",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": 10000
+    }
+]
