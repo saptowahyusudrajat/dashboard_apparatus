@@ -1,0 +1,49 @@
+[
+    {
+        "id": "f63c2c7aa690f562",
+        "type": "ui_slider",
+        "z": "028400f082bfa284",
+        "name": "Slider 0-100",
+        "label": "Set Point",
+        "tooltip": "",
+        "group": "da20fba7a1cd8b67",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "all",
+        "topic": "",
+        "topicType": "str",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "className": "",
+        "x": 347.09906005859375,
+        "y": 1049.7216796875,
+        "wires": [
+            [
+                "4051d2965a3fbcaf"
+            ]
+        ]
+    },
+    {
+        "id": "da20fba7a1cd8b67",
+        "type": "ui_group",
+        "name": "FLOW CONTROL",
+        "tab": "dashboard-tab",
+        "order": 2,
+        "disp": true,
+        "width": 11,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dashboard-tab",
+        "type": "ui_tab",
+        "name": "Hydrogen Apparatus Monitoring",
+        "icon": "fa-fire",
+        "order": 2,
+        "disabled": false,
+        "hidden": true
+    }
+]
