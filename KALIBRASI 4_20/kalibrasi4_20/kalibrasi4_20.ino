@@ -18,7 +18,7 @@ unsigned long last_sample_time = 0;
 
 void setup() {
   Serial.begin(115200);
-  Wire.begin(22, 23);
+  Wire.begin(21, 22);
 
   if (!ads.begin()) {
     Serial.println("Failed to initialize ADS1115. Check wiring.");
