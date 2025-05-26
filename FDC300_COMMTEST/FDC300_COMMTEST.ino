@@ -1,8 +1,8 @@
 #include <HardwareSerial.h>
 #include <ModbusMaster.h>
 
-#define MAX485_DE     4
-#define MAX485_RE_NEG 4
+#define MAX485_DE     23
+#define MAX485_RE_NEG 23
 
 ModbusMaster node;
 

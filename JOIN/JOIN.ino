@@ -103,6 +103,7 @@ float readPressure() {
       
       // Clamp pressure to valid range (in case of slight calibration errors)
       pressure = constrain(pressure, PSI_MIN, PSI_MAX);
+      pressure = pressure*0.0689476;
       
       // Reset for next cycle
       raw_sum = 0;
