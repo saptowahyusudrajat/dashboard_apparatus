@@ -9,10 +9,10 @@
 
 // Chip Select Pins for each sensor
 #define MAX1_CS 2
-#define MAX2_CS 4
+#define MAX2_CS 4 //sievert 1
 #define MAX3_CS 33
 #define MAX4_CS 32
-#define MAX5_CS 5
+#define MAX5_CS 5 //sievert 2
 
 // Create thermocouple sensor objects
 Adafruit_MAX31855 thermocouple1(MAX1_CS);
