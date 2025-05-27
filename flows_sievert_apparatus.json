@@ -1,0 +1,1210 @@
+[
+    {
+        "id": "ae77ae21d5f020ec",
+        "type": "tab",
+        "label": "SIEVERT APPARATUS",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "88bf32534c2dca79",
+        "type": "serial in",
+        "z": "ae77ae21d5f020ec",
+        "name": "ESP32 Serial",
+        "serial": "312f5e127a06f902",
+        "x": 815.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [
+                "474ee2027e913028",
+                "e4086f07bed0aa50",
+                "500b7ef308001fad"
+            ]
+        ]
+    },
+    {
+        "id": "474ee2027e913028",
+        "type": "function",
+        "z": "ae77ae21d5f020ec",
+        "name": "Parse Sensor Data",
+        "func": "let line = msg.payload;\nlet parts = line.split(',');\nlet data = {};\n\nfor (let part of parts) {\n    let pair = part.split(':');\n    if (pair.length === 2) {\n        let key = pair[0].trim();\n        let value = parseFloat(pair[1].trim());\n        data[key] = value;\n    }\n}\n\nnode.warn(data);  // Log the parsed data to the debug window\n\nlet msgs = [];\nfor (let key in data) {\n    msgs.push({\n        payload: data[key],\n        topic: key\n    });\n}\n\nreturn [msgs];\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 80,
+        "wires": [
+            [
+                "29a4ad00cff78f28"
+            ]
+        ]
+    },
+    {
+        "id": "29a4ad00cff78f28",
+        "type": "switch",
+        "z": "ae77ae21d5f020ec",
+        "name": "Route by Sensor",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "flow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pressure",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_5",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "slider",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 8,
+        "x": 1235.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [],
+            [
+                "8a0d7cbfb2f12418",
+                "dad4ce6b96b80e6c"
+            ],
+            [
+                "05a8978e9a4a378f",
+                "77a855322727f1e6"
+            ],
+            [
+                "b32bf0c861fb4d84",
+                "e9f43bfe604bc612"
+            ],
+            [],
+            [],
+            [],
+            [
+                "646a0a830a2dbb23"
+            ]
+        ]
+    },
+    {
+        "id": "8a0d7cbfb2f12418",
+        "type": "ui_gauge",
+        "z": "ae77ae21d5f020ec",
+        "name": "Pressure",
+        "group": "ccb739c6d3996668",
+        "order": 4,
+        "width": 7,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "bar",
+        "format": "{{value}}",
+        "min": "-1.01",
+        "max": "55.2",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1720,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "dad4ce6b96b80e6c",
+        "type": "ui_chart",
+        "z": "ae77ae21d5f020ec",
+        "name": "Pressure",
+        "group": "ccb739c6d3996668",
+        "order": 2,
+        "width": 11,
+        "height": 7,
+        "label": "Pressure (bar)",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "3600",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#4dff00",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1720,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "05a8978e9a4a378f",
+        "type": "ui_gauge",
+        "z": "ae77ae21d5f020ec",
+        "name": "Thermocouple 1",
+        "group": "bc577322dd2465e6",
+        "order": 4,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1780,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "77a855322727f1e6",
+        "type": "ui_chart",
+        "z": "ae77ae21d5f020ec",
+        "name": "Thermocouple 1",
+        "group": "bc577322dd2465e6",
+        "order": 2,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 1 (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "3",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00b3ff",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1760,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b32bf0c861fb4d84",
+        "type": "ui_gauge",
+        "z": "ae77ae21d5f020ec",
+        "name": "Thermocouple 2",
+        "group": "bc577322dd2465e6",
+        "order": 10,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1780,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "e9f43bfe604bc612",
+        "type": "ui_chart",
+        "z": "ae77ae21d5f020ec",
+        "name": "Thermocoouple 2",
+        "group": "bc577322dd2465e6",
+        "order": 9,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 2 (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ffdd00",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1790,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8365de3e5129eea5",
+        "type": "ui_button",
+        "z": "ae77ae21d5f020ec",
+        "name": "",
+        "group": "d42dd8160e91d29f",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "CLEAR CHART",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 960,
+        "y": 320,
+        "wires": [
+            [
+                "caa53049900f6e4b"
+            ]
+        ]
+    },
+    {
+        "id": "caa53049900f6e4b",
+        "type": "function",
+        "z": "ae77ae21d5f020ec",
+        "name": "function 1",
+        "func": "if (msg.payload.length === 0) {\n    // Send a message to clear the graph data\n    return { payload: [] }; // Clear the graph by sending an empty array\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 320,
+        "wires": [
+            [
+                "e9f43bfe604bc612",
+                "77a855322727f1e6",
+                "dad4ce6b96b80e6c"
+            ]
+        ]
+    },
+    {
+        "id": "55921e42ba59068c",
+        "type": "ui_switch",
+        "z": "ae77ae21d5f020ec",
+        "name": "Logging Toggle",
+        "label": "Logging",
+        "tooltip": "Enable/Disable Logging",
+        "group": "d42dd8160e91d29f",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "set_logging",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 880,
+        "y": 540,
+        "wires": [
+            [
+                "11348c7164c712af"
+            ]
+        ]
+    },
+    {
+        "id": "bcb699b0948a9ff3",
+        "type": "inject",
+        "z": "ae77ae21d5f020ec",
+        "name": "Enable Logging",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "set_logging",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 850,
+        "y": 660,
+        "wires": [
+            [
+                "11348c7164c712af"
+            ]
+        ]
+    },
+    {
+        "id": "b312cbfa05591c26",
+        "type": "inject",
+        "z": "ae77ae21d5f020ec",
+        "name": "Disable Logging",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "set_logging",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 850,
+        "y": 700,
+        "wires": [
+            [
+                "11348c7164c712af"
+            ]
+        ]
+    },
+    {
+        "id": "11348c7164c712af",
+        "type": "change",
+        "z": "ae77ae21d5f020ec",
+        "name": "Set Logging Flag",
+        "rules": [
+            {
+                "t": "set",
+                "p": "loggingEnabled",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 1170,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e4086f07bed0aa50",
+        "type": "switch",
+        "z": "ae77ae21d5f020ec",
+        "name": "Check Logging Enabled",
+        "property": "loggingEnabled",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 790,
+        "y": 760,
+        "wires": [
+            [
+                "29b495b47b777d93"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "29b495b47b777d93",
+        "type": "function",
+        "z": "ae77ae21d5f020ec",
+        "name": "Format to CSV",
+        "func": "// Define fixed order of fields\nconst fieldOrder = [\n    \"pressure\", \"temperature_1\", \"temperature_2\"\n];\n\nconst now = new Date();\nconst yyyy = now.getFullYear();\nconst mm = String(now.getMonth() + 1).padStart(2, '0');\nconst dd = String(now.getDate()).padStart(2, '0');\nconst hh = String(now.getHours()).padStart(2, '0');\nconst min = String(now.getMinutes()).padStart(2, '0');\nconst sec = String(now.getSeconds()).padStart(2, '0');\n\nconst timestamp = `${yyyy}-${mm}-${dd} ${hh}:${min}:${sec}`;\n\n// Get suffix and counter state from flow context\nlet lastSuffix = flow.get(\"fileSuffix\");\nlet lastTime = flow.get(\"fileSuffixTime\");\nlet counter = flow.get(\"fileCounter\") || 0;\n\nconst currentTime = new Date().getTime();\n\n// Check timeout (2 seconds)\nconst timedOut = !lastTime || (currentTime - lastTime) > 2000;\nif (!lastSuffix || timedOut) {\n    lastSuffix = Math.random().toString(36).substring(2, 10);\n    counter = 1; // Reset counter if timeout\n} else {\n    counter += 1; // Otherwise increment\n}\n\n// Save updated suffix, counter, and time\nflow.set(\"fileSuffix\", lastSuffix);\nflow.set(\"fileSuffixTime\", currentTime);\nflow.set(\"fileCounter\", counter);\n\n// Construct filename with suffix\nconst filename = `C:\\\\logs\\\\log-${yyyy}-${mm}-${dd}-${lastSuffix}.csv`;\n\n// Parse key:value string into an object\nconst keyValuePairs = msg.payload.toString().split(\",\");\nlet data = {};\nkeyValuePairs.forEach(pair => {\n    let [key, value] = pair.split(\":\");\n    data[key.trim()] = value.trim();\n});\n\n// Build CSV row in order: counter, timestamp, then selected values\nconst values = [counter, timestamp, ...fieldOrder.map(f => data[f] || \"\")];\nmsg.payload = values.join(\",\") + \"\\n\";\nmsg.filename = filename;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 760,
+        "wires": [
+            [
+                "a7700ede5cf22c9b"
+            ]
+        ]
+    },
+    {
+        "id": "a7700ede5cf22c9b",
+        "type": "file",
+        "z": "ae77ae21d5f020ec",
+        "name": "Save to CSV File",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1380,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "500b7ef308001fad",
+        "type": "function",
+        "z": "ae77ae21d5f020ec",
+        "d": true,
+        "name": "Parse Serial with Timestamp",
+        "func": "// Ensure msg.payload is a string\nlet line = String(msg.payload).trim();\n\n// Initialize row with current timestamp\nlet row = {\n    \"Timestamp\": new Date().toLocaleString()\n};\n\n// Parse the incoming line of serial data\nlet parts = line.split(',');\nfor (let i = 0; i < parts.length; i++) {\n    let pair = parts[i].split(':');\n    if (pair.length === 2) {\n        let key = pair[0].trim();\n        let value = parseFloat(pair[1]);\n        if (!isNaN(value)) {\n            // Rename keys with units\n            switch (key) {\n                case \"flow\":\n                    row[\"Flow (L/min)\"] = value;\n                    break;\n                case \"pressure\":\n                    row[\"Pressure (bar)\"] = value;\n                    break;\n                case \"temperature_1\":\n                    row[\"Temperature 1 (°C)\"] = value;\n                    break;\n                case \"temperature_2\":\n                    row[\"Temperature 2 (°C)\"] = value;\n                    break;\n                case \"temperature_3\":\n                    row[\"Temperature 3 (°C)\"] = value;\n                    break;\n                case \"temperature_4\":\n                    row[\"Temperature 4 (°C)\"] = value;\n                    break;\n                case \"temperature_5\":\n                    row[\"Temperature 5 (°C)\"] = value;\n                    break;\n            }\n        }\n    }\n}\n\n// Retrieve existing data array from flow context\nlet data = flow.get(\"tableData\") || [];\n\n// Add the new row to the array\ndata.push(row);\n\n// Keep only the latest 10 entries\nif (data.length > 10) {\n    data = data.slice(data.length - 10);\n}\n\n// Save updated array back to flow context\nflow.set(\"tableData\", data);\n\n// Send updated array to the table\nmsg.payload = data;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 880,
+        "wires": [
+            [
+                "783807cd2079db41"
+            ]
+        ]
+    },
+    {
+        "id": "783807cd2079db41",
+        "type": "ui_table",
+        "z": "ae77ae21d5f020ec",
+        "d": true,
+        "group": "",
+        "name": "Sensor Table",
+        "order": 1,
+        "width": "36",
+        "height": "7",
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 1230,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "73039bfc13f180a2",
+        "type": "ui_template",
+        "z": "ae77ae21d5f020ec",
+        "group": "",
+        "name": "ggtext",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n    /* Make the main reading (center value) on the gauge larger and bold */\n    .nr-dashboard-gauge text:nth-of-type(1) {\n        font-family: 'Arial Black', Arial, sans-serif !important;\n        font-size: 32px !important;\n        /* Increase this if needed */\n        fill: white !important;\n    }\n\n    /* Make the unit text and min/max text larger */\n    .nr-dashboard-gauge text {\n        font-family: 'Arial Black', Arial, sans-serif !important;\n        font-size: 18px !important;\n        fill: white !important;\n    }\n\n\n</style>\n\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 1130,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "646a0a830a2dbb23",
+        "type": "ui_text",
+        "z": "ae77ae21d5f020ec",
+        "group": "da20fba7a1cd8b67",
+        "order": 5,
+        "width": 4,
+        "height": 1,
+        "name": "",
+        "label": "Callback",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1220,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4eecdd653a5a0263",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "3ecb684841515101",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "e65b3a62e7310eaf",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "da20fba7a1cd8b67",
+        "order": 2,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "2a09ed12f5e650cd",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "f3c4a22e09a3aa0f",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 3,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "c06efde14f957252",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "3fc78ca47c05a7b4",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 6,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "6f914ad3d805ffc3",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 7,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "b189305be64052d7",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 9,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "56e2c139a54762b8",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 11,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "7bb04fda82881246",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 12,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a7a7f8a6823fa734",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 13,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "4e2663a75bfdeb27",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 15,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a561cbbd33b0830e",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 17,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a58e26a9311a9b22",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 18,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "b59052c29321d20d",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 19,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "880c7c6a612b8c90",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 21,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "90a85ca541d2cb1c",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 23,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "26635a28c31f07d3",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 24,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "b806fd629fd45313",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 26,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "dee0ecc9bd27a18b",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 28,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "040be980b33667b3",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 29,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "c2b54c64f3f41191",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 1,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "6330fee3fb79c506",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 3,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "e6751750cc975634",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 5,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "0434ab93a377b182",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 6,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "c7194442bc2eedf9",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "charts",
+        "order": 1,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "b4e3a735d67abb9a",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "charts",
+        "order": 3,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "f1ff8a816222f85d",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "charts",
+        "order": 5,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "ae06614905b919c4",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "charts",
+        "order": 6,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "411765e58ee721d9",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "d42dd8160e91d29f",
+        "order": 2,
+        "width": 12,
+        "height": 1
+    },
+    {
+        "id": "d911cf13b99ddb7d",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "d42dd8160e91d29f",
+        "order": 4,
+        "width": 12,
+        "height": 1
+    },
+    {
+        "id": "5ed5432d7fdccfd3",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "ccb739c6d3996668",
+        "order": 1,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "7b48d321f32767af",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "ccb739c6d3996668",
+        "order": 3,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "acd0eb57217b00fb",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "ccb739c6d3996668",
+        "order": 5,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "44e84a31c22ad145",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "ccb739c6d3996668",
+        "order": 6,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "8c13407e19ac955a",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "c15b1c82ab237472",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 3,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "b234f14049437a3a",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a66edd64e96a08ad",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 6,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "21b4a6ef97322888",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 7,
+        "width": 18,
+        "height": 1
+    },
+    {
+        "id": "228f7d85b671e1e1",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 8,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "03be82987950db0c",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 11,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "6c783781f2cad264",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 12,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "2cdcb82d3aec662b",
+        "type": "ui_spacer",
+        "z": "ae77ae21d5f020ec",
+        "name": "spacer",
+        "group": "bc577322dd2465e6",
+        "order": 13,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "312f5e127a06f902",
+        "type": "serial-port",
+        "name": "esp32",
+        "serialport": "COM8",
+        "serialbaud": "115200",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "ccb739c6d3996668",
+        "type": "ui_group",
+        "name": "PRESSURE",
+        "tab": "66b7ef39d0c990eb",
+        "order": 2,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "bc577322dd2465e6",
+        "type": "ui_group",
+        "name": "TEMPERATURE",
+        "tab": "66b7ef39d0c990eb",
+        "order": 3,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d42dd8160e91d29f",
+        "type": "ui_group",
+        "name": "DATA CONTROL",
+        "tab": "66b7ef39d0c990eb",
+        "order": 1,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "da20fba7a1cd8b67",
+        "type": "ui_group",
+        "name": "FLOW CONTROL",
+        "tab": "dashboard-tab",
+        "order": 2,
+        "disp": true,
+        "width": 11,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3ecb684841515101",
+        "type": "ui_group",
+        "name": "DATA CONTROL",
+        "tab": "dashboard-tab",
+        "order": 1,
+        "disp": true,
+        "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "20360c9e681dfa0c",
+        "type": "ui_group",
+        "name": "TEMPERATURE",
+        "tab": "dashboard-tab",
+        "order": 3,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "26fac49d1f498eb4",
+        "type": "ui_group",
+        "name": "PRESSURE",
+        "tab": "dashboard-tab",
+        "order": 4,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "charts",
+        "type": "ui_group",
+        "name": "FLOW",
+        "tab": "dashboard-tab",
+        "order": 5,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "66b7ef39d0c990eb",
+        "type": "ui_tab",
+        "name": "Sievert Apparatus Monitoring",
+        "icon": "dashboard",
+        "order": 6,
+        "disabled": false,
+        "hidden": true
+    },
+    {
+        "id": "dashboard-tab",
+        "type": "ui_tab",
+        "name": "Hydrogen Apparatus Monitoring",
+        "icon": "fa-fire",
+        "order": 2,
+        "disabled": true,
+        "hidden": true
+    }
+]
