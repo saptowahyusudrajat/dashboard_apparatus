@@ -1,0 +1,1967 @@
+[
+    {
+        "id": "6eb6bf21f6177568",
+        "type": "tab",
+        "label": "HYDROGEN APP V3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "202c8e3a6a42176d",
+        "type": "serial in",
+        "z": "6eb6bf21f6177568",
+        "name": "ESP32 Serial",
+        "serial": "312f5e127a06f902",
+        "x": 815.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [
+                "d6d72838b9a4be70",
+                "66fdf7b0f7f44c2e"
+            ]
+        ]
+    },
+    {
+        "id": "d6d72838b9a4be70",
+        "type": "function",
+        "z": "6eb6bf21f6177568",
+        "name": "Parse Sensor Data",
+        "func": "let line = msg.payload;\nlet parts = line.split(',');\nlet data = {};\n\nfor (let part of parts) {\n    let pair = part.split(':');\n    if (pair.length === 2) {\n        let key = pair[0].trim();\n        let value = parseFloat(pair[1].trim());\n        data[key] = value;\n    }\n}\n\nnode.warn(data);  // Log the parsed data to the debug window\n\nlet msgs = [];\nfor (let key in data) {\n    msgs.push({\n        payload: data[key],\n        topic: key\n    });\n}\n\nreturn [msgs];\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 80,
+        "wires": [
+            [
+                "2b7049498ba55e7e"
+            ]
+        ]
+    },
+    {
+        "id": "2b7049498ba55e7e",
+        "type": "switch",
+        "z": "6eb6bf21f6177568",
+        "name": "Route by Sensor",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "flow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pressure",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_3",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_4",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temperature_5",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "slider",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 8,
+        "x": 1235.09912109375,
+        "y": 86.09905242919922,
+        "wires": [
+            [
+                "bc4b980d8830a2f0",
+                "1d3ae94677a80ddd"
+            ],
+            [
+                "452c36283e0fd3ed",
+                "1933e9944d01fc17"
+            ],
+            [
+                "a2e76a5c9eeabb6b",
+                "4a9b5c974cdd7e85"
+            ],
+            [
+                "b817d68486af2277",
+                "1125a773ac6b0167"
+            ],
+            [
+                "6a68c50ea18927f7",
+                "2cc6cc9777f65f4b"
+            ],
+            [
+                "739a3f55f30f9f44",
+                "4ad21a1b138947b2"
+            ],
+            [
+                "597a0e9df83cf084",
+                "2f6e824010a46fbe"
+            ],
+            [
+                "f806e33c48e46443"
+            ]
+        ]
+    },
+    {
+        "id": "bc4b980d8830a2f0",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Flow Gauge",
+        "group": "a818be6c5d77a55a",
+        "order": 4,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "L/min",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "30",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1870,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "1d3ae94677a80ddd",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Flow Chart",
+        "group": "a818be6c5d77a55a",
+        "order": 2,
+        "width": 12,
+        "height": 7,
+        "label": "Flow (L/min)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff0000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1870,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "452c36283e0fd3ed",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Pressure",
+        "group": "9d10d5af4db86159",
+        "order": 4,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "bar",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "25",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1860,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "1933e9944d01fc17",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Pressure",
+        "group": "9d10d5af4db86159",
+        "order": 2,
+        "width": 12,
+        "height": 7,
+        "label": "Pressure (bar)",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "3600",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#4dff00",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1860,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a2e76a5c9eeabb6b",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 1",
+        "group": "019f8883f5361733",
+        "order": 4,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1880,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4a9b5c974cdd7e85",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 1",
+        "group": "019f8883f5361733",
+        "order": 2,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 1 (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "3",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00b3ff",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1880,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b817d68486af2277",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 2",
+        "group": "019f8883f5361733",
+        "order": 11,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1880,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "1125a773ac6b0167",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocoouple 2",
+        "group": "019f8883f5361733",
+        "order": 9,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 2 (°C)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ffdd00",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1890,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6a68c50ea18927f7",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 3",
+        "group": "019f8883f5361733",
+        "order": 18,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1880,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2cc6cc9777f65f4b",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocoouple 3",
+        "group": "019f8883f5361733",
+        "order": 16,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 3 (°C)",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff4000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1890,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6519237d0cce45db",
+        "type": "ui_button",
+        "z": "6eb6bf21f6177568",
+        "name": "",
+        "group": "553cbd6d324a22e1",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "CLEAR CHART",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 960,
+        "y": 320,
+        "wires": [
+            [
+                "3df535e71997a4a2"
+            ]
+        ]
+    },
+    {
+        "id": "3df535e71997a4a2",
+        "type": "function",
+        "z": "6eb6bf21f6177568",
+        "name": "function 1",
+        "func": "if (msg.payload.length === 0) {\n    // Send a message to clear the graph data\n    return { payload: [] }; // Clear the graph by sending an empty array\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 320,
+        "wires": [
+            [
+                "2cc6cc9777f65f4b",
+                "1d3ae94677a80ddd",
+                "1125a773ac6b0167",
+                "4a9b5c974cdd7e85",
+                "1933e9944d01fc17",
+                "4ad21a1b138947b2",
+                "2f6e824010a46fbe"
+            ]
+        ]
+    },
+    {
+        "id": "739a3f55f30f9f44",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 4",
+        "group": "019f8883f5361733",
+        "order": 25,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1880,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "4ad21a1b138947b2",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 4",
+        "group": "019f8883f5361733",
+        "order": 23,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 4 (°C)",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00ffbf",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1880,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "597a0e9df83cf084",
+        "type": "ui_gauge",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 5",
+        "group": "019f8883f5361733",
+        "order": 32,
+        "width": 6,
+        "height": 3,
+        "gtype": "gage",
+        "title": "",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1880,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "2f6e824010a46fbe",
+        "type": "ui_chart",
+        "z": "6eb6bf21f6177568",
+        "name": "Thermocouple 5",
+        "group": "019f8883f5361733",
+        "order": 30,
+        "width": 12,
+        "height": 7,
+        "label": "Thermocouple 5 (°C)",
+        "chartType": "line",
+        "legend": false,
+        "xformat": "HH:mm:ss",
+        "interpolate": "bezier",
+        "nodata": "Waiting...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "200",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff00f7",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1880,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3cceca678bf9acd7",
+        "type": "ui_switch",
+        "z": "6eb6bf21f6177568",
+        "name": "Logging Toggle",
+        "label": "Logging",
+        "tooltip": "Enable/Disable Logging",
+        "group": "553cbd6d324a22e1",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "set_logging",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 880,
+        "y": 620,
+        "wires": [
+            [
+                "f5e15d0b1e083123"
+            ]
+        ]
+    },
+    {
+        "id": "45420a384bab52be",
+        "type": "inject",
+        "z": "6eb6bf21f6177568",
+        "name": "Enable Logging",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "set_logging",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 880,
+        "y": 700,
+        "wires": [
+            [
+                "f5e15d0b1e083123"
+            ]
+        ]
+    },
+    {
+        "id": "9ec82df231f8f6d1",
+        "type": "inject",
+        "z": "6eb6bf21f6177568",
+        "name": "Disable Logging",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "set_logging",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 880,
+        "y": 660,
+        "wires": [
+            [
+                "f5e15d0b1e083123"
+            ]
+        ]
+    },
+    {
+        "id": "f5e15d0b1e083123",
+        "type": "change",
+        "z": "6eb6bf21f6177568",
+        "name": "Set Logging Flag",
+        "rules": [
+            {
+                "t": "set",
+                "p": "loggingEnabled",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "x": 1130,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "66fdf7b0f7f44c2e",
+        "type": "switch",
+        "z": "6eb6bf21f6177568",
+        "name": "Check Logging Enabled",
+        "property": "loggingEnabled",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 590,
+        "y": 820,
+        "wires": [
+            [
+                "5e1e32d4d5399cc3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5e1e32d4d5399cc3",
+        "type": "function",
+        "z": "6eb6bf21f6177568",
+        "name": "Format to CSV",
+        "func": "// Define fixed order of fields\nconst fieldOrder = [\n    \"flow\", \"pressure\",\n    \"temperature_1\", \"temperature_2\", \"temperature_3\",\n    \"temperature_4\", \"temperature_5\"\n];\n\nconst now = new Date();\nconst yyyy = now.getFullYear();\nconst mm = String(now.getMonth() + 1).padStart(2, '0');\nconst dd = String(now.getDate()).padStart(2, '0');\nconst hh = String(now.getHours()).padStart(2, '0');\nconst min = String(now.getMinutes()).padStart(2, '0');\nconst sec = String(now.getSeconds()).padStart(2, '0');\n\nconst timestamp = `${yyyy}-${mm}-${dd} ${hh}:${min}:${sec}`;\n\n// Get filename from flow context (set by text input)\nlet filename = flow.get(\"log_filename\") || \"hydrogen_log\";\nlet currentFilename = flow.get(\"current_log_filename\");\n\n// Initialize or reset counter if filename changed\nif (currentFilename !== filename) {\n    flow.set(\"current_log_filename\", filename);\n    flow.set(\"log_counter\", 1); // Reset counter for new file\n}\n\n// Get logging interval from flow context\nlet loggingInterval = flow.get(\"logging_interval\") || 1000; // Default to 1 second\nlet lastLogTime = flow.get(\"last_log_time\") || 0;\n\n// Check if enough time has passed since last log\nconst currentTime = new Date().getTime();\nif (currentTime - lastLogTime < loggingInterval) {\n    return null; // Skip logging this time\n}\n\n// Update last log time\nflow.set(\"last_log_time\", currentTime);\n\n// Get and increment counter\nlet counter = flow.get(\"log_counter\") || 1;\nflow.set(\"log_counter\", counter + 1);\n\n// Parse key:value string into an object\nconst keyValuePairs = msg.payload.toString().split(\",\");\nlet data = {};\nkeyValuePairs.forEach(pair => {\n    let [key, value] = pair.split(\":\");\n    if (key && value) {\n        data[key.trim()] = value.trim();\n    }\n});\n\n// Build CSV row: counter, timestamp, then values\nconst values = [counter, timestamp, ...fieldOrder.map(f => data[f] || \"\")];\nmsg.payload = values.join(\",\") + \"\\n\";\nmsg.filename = `C:\\\\logs\\\\${filename}.csv`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 820,
+        "wires": [
+            [
+                "27ac265eef7e9063"
+            ]
+        ]
+    },
+    {
+        "id": "27ac265eef7e9063",
+        "type": "file",
+        "z": "6eb6bf21f6177568",
+        "name": "Save to CSV File",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1030,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c10a5ec9f6bfde69",
+        "type": "ui_template",
+        "z": "6eb6bf21f6177568",
+        "group": "",
+        "name": "ggtext",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n    /* Make the main reading (center value) on the gauge larger and bold */\n    .nr-dashboard-gauge text:nth-of-type(1) {\n        font-family: 'Arial Black', Arial, sans-serif !important;\n        font-size: 32px !important;\n        /* Increase this if needed */\n        fill: white !important;\n    }\n\n    /* Make the unit text and min/max text larger */\n    .nr-dashboard-gauge text {\n        font-family: 'Arial Black', Arial, sans-serif !important;\n        font-size: 18px !important;\n        fill: white !important;\n    }\n\n\n</style>\n\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 2070,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1099255063a96b58",
+        "type": "ui_slider",
+        "z": "6eb6bf21f6177568",
+        "name": "Slider 0-30",
+        "label": "Set Point",
+        "tooltip": "",
+        "group": "4625761364b70fb0",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "",
+        "topicType": "str",
+        "min": 0,
+        "max": "30",
+        "step": "0.001",
+        "className": "",
+        "x": 840,
+        "y": 1040,
+        "wires": [
+            [
+                "16d21658539da9d5"
+            ]
+        ]
+    },
+    {
+        "id": "504ca541634ad545",
+        "type": "ui_button",
+        "z": "6eb6bf21f6177568",
+        "name": "Send Button",
+        "group": "4625761364b70fb0",
+        "order": 6,
+        "width": 5,
+        "height": 1,
+        "passthru": false,
+        "label": "SEND",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "send",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 840,
+        "y": 1100,
+        "wires": [
+            [
+                "e9ed3cbad5c176a0"
+            ]
+        ]
+    },
+    {
+        "id": "16d21658539da9d5",
+        "type": "change",
+        "z": "6eb6bf21f6177568",
+        "name": "Store Slider Value",
+        "rules": [
+            {
+                "t": "set",
+                "p": "slider_value",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1070,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e9ed3cbad5c176a0",
+        "type": "function",
+        "z": "6eb6bf21f6177568",
+        "name": "Get & Format Value",
+        "func": "let value = flow.get('slider_value') || 0;\nmsg.payload = value.toString() + \"\\n\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 1100,
+        "wires": [
+            [
+                "c9e6d80211cf4d4f"
+            ]
+        ]
+    },
+    {
+        "id": "c9e6d80211cf4d4f",
+        "type": "serial out",
+        "z": "6eb6bf21f6177568",
+        "name": "SEND",
+        "serial": "312f5e127a06f902",
+        "x": 1382.9009399414062,
+        "y": 1090.2783203125,
+        "wires": []
+    },
+    {
+        "id": "f806e33c48e46443",
+        "type": "ui_text",
+        "z": "6eb6bf21f6177568",
+        "group": "4625761364b70fb0",
+        "order": 3,
+        "width": 4,
+        "height": 1,
+        "name": "",
+        "label": "Callback",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1860,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "824f61e45ad727b8",
+        "type": "ui_text_input",
+        "z": "6eb6bf21f6177568",
+        "name": "Log Filename",
+        "label": "Log Filename (without extension)",
+        "tooltip": "",
+        "group": "553cbd6d324a22e1",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "log_filename",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 880,
+        "y": 460,
+        "wires": [
+            [
+                "f444de150e878769"
+            ]
+        ]
+    },
+    {
+        "id": "f444de150e878769",
+        "type": "change",
+        "z": "6eb6bf21f6177568",
+        "name": "Store Filename",
+        "rules": [
+            {
+                "t": "set",
+                "p": "log_filename",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b57fc0eb529d810b",
+        "type": "inject",
+        "z": "6eb6bf21f6177568",
+        "name": "Set Default Filename",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "log_filename",
+        "payload": "hydrogen_log",
+        "payloadType": "str",
+        "x": 860,
+        "y": 420,
+        "wires": [
+            [
+                "f444de150e878769"
+            ]
+        ]
+    },
+    {
+        "id": "51955d9a5d14c5b4",
+        "type": "ui_slider",
+        "z": "6eb6bf21f6177568",
+        "name": "Logging Interval",
+        "label": "Log Interval (seconds)",
+        "tooltip": "",
+        "group": "553cbd6d324a22e1",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "logging_interval",
+        "topicType": "msg",
+        "min": 1,
+        "max": 600,
+        "step": 1,
+        "className": "",
+        "x": 880,
+        "y": 520,
+        "wires": [
+            [
+                "b3875b1dac74565a"
+            ]
+        ]
+    },
+    {
+        "id": "b3875b1dac74565a",
+        "type": "change",
+        "z": "6eb6bf21f6177568",
+        "name": "Store Logging Interval",
+        "rules": [
+            {
+                "t": "set",
+                "p": "logging_interval",
+                "pt": "flow",
+                "to": "payload * 1000",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1120,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "228ff1338f5eb42a",
+        "type": "inject",
+        "z": "6eb6bf21f6177568",
+        "name": "Set Default Interval (1s)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "logging_interval",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 850,
+        "y": 560,
+        "wires": [
+            [
+                "b3875b1dac74565a"
+            ]
+        ]
+    },
+    {
+        "id": "9dbf69c8822509f4",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "3ecb684841515101",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "bb15c232cba7ddcf",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "da20fba7a1cd8b67",
+        "order": 2,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "27febd4a0f7be971",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "663fc5c8a8de951a",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 3,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "63e28fa5c6574edc",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "89ce46d3e690761e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 6,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "13965ae2632fb5a2",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 7,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "7b7400fbc24c7de8",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 9,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "5351d016f5635a18",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 11,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "072b49a52553a8c8",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 12,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "14aa7208f5fc1527",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 13,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "9e4a34eee9142212",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 15,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "e9c5aa693cfadc56",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 17,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "af39344098c116ab",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 18,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "aca7a1f43092c9d5",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 19,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "8e8763389e1bd529",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 21,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "2b1386f0deae9a1e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 23,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "103646e2b13c4d63",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 24,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "d349d474c2276b6d",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 26,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "36dde5aaac6fa47e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 28,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "99500e18776811a3",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "20360c9e681dfa0c",
+        "order": 29,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "3d4461a82b12788c",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 1,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "5c04fe8e28e016b9",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 3,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "a256873113081ac1",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 5,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "83e0656f5d66cf9a",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "26fac49d1f498eb4",
+        "order": 6,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "d126a3738e680934",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "charts",
+        "order": 1,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "7c25b0720dadda2a",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "charts",
+        "order": 3,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "d0812bf1606a27aa",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "charts",
+        "order": 5,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "c96db66068657ff0",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "charts",
+        "order": 6,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "62d5607e2eb63f21",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "4625761364b70fb0",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "04b74c1a71cddfc6",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "4625761364b70fb0",
+        "order": 4,
+        "width": 11,
+        "height": 1
+    },
+    {
+        "id": "6cdee4904bd7b0c4",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "4625761364b70fb0",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "fb1726b4de557c1c",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "757a28460e4b126d",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 3,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "c4d017e6f5a33b1e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "1560c262aa4dc225",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 6,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a94d0cb3ce03c591",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 7,
+        "width": 18,
+        "height": 1
+    },
+    {
+        "id": "fed128d6f3184cbd",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 8,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "83829bd1a4e87f22",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 10,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "275a872477192e74",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 12,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a262602122c02e5d",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 13,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "581f6a2d9fc3e78e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 14,
+        "width": 18,
+        "height": 1
+    },
+    {
+        "id": "fa3b3176fa8a1ddf",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 15,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "5a49186b7f8444e6",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 17,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "d08a2fd7991226df",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 19,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "9495d6dc662da1bb",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 20,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "7c032ef713b367f2",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 21,
+        "width": 18,
+        "height": 1
+    },
+    {
+        "id": "4b86551d986d948b",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 22,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "13e705cf6bf9c9a2",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 24,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "6a5d5f083958c30e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 26,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "79b6d3f12ce8e12b",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 27,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "990d9235e89e80ad",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 28,
+        "width": 18,
+        "height": 1
+    },
+    {
+        "id": "eb241bcdc41c7fb8",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 29,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "808e5a8d8a14e698",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 31,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "57d419792a1ac348",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 33,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "f7fc05e20a4b32f4",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "019f8883f5361733",
+        "order": 34,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "a9c48f2dcd68f0ef",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "9d10d5af4db86159",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "ea3bb5e09b562919",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "9d10d5af4db86159",
+        "order": 3,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "447aacb8c1e64f7e",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "9d10d5af4db86159",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "988ac89add30f4e2",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "9d10d5af4db86159",
+        "order": 6,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "9efb6b197b4b1611",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "a818be6c5d77a55a",
+        "order": 1,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "7d77d2c0eb079d28",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "a818be6c5d77a55a",
+        "order": 3,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "cc599ffb4d4d029a",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "a818be6c5d77a55a",
+        "order": 5,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "d0e05cb4a1020ede",
+        "type": "ui_spacer",
+        "z": "6eb6bf21f6177568",
+        "name": "spacer",
+        "group": "a818be6c5d77a55a",
+        "order": 6,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "312f5e127a06f902",
+        "type": "serial-port",
+        "name": "esp32",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "a818be6c5d77a55a",
+        "type": "ui_group",
+        "name": "FLOW",
+        "tab": "4813db82ad1b7894",
+        "order": 5,
+        "disp": true,
+        "width": "18",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9d10d5af4db86159",
+        "type": "ui_group",
+        "name": "PRESSURE",
+        "tab": "4813db82ad1b7894",
+        "order": 4,
+        "disp": true,
+        "width": "18",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "019f8883f5361733",
+        "type": "ui_group",
+        "name": "TEMPERATURE",
+        "tab": "4813db82ad1b7894",
+        "order": 3,
+        "disp": true,
+        "width": "18",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "553cbd6d324a22e1",
+        "type": "ui_group",
+        "name": "DATA CONTROL",
+        "tab": "4813db82ad1b7894",
+        "order": 1,
+        "disp": true,
+        "width": "7",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4625761364b70fb0",
+        "type": "ui_group",
+        "name": "FLOW CONTROL",
+        "tab": "4813db82ad1b7894",
+        "order": 2,
+        "disp": true,
+        "width": "11",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "3ecb684841515101",
+        "type": "ui_group",
+        "name": "DATA CONTROL",
+        "tab": "dashboard-tab",
+        "order": 1,
+        "disp": true,
+        "width": 7,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "da20fba7a1cd8b67",
+        "type": "ui_group",
+        "name": "FLOW CONTROL",
+        "tab": "dashboard-tab",
+        "order": 2,
+        "disp": true,
+        "width": 11,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "20360c9e681dfa0c",
+        "type": "ui_group",
+        "name": "TEMPERATURE",
+        "tab": "dashboard-tab",
+        "order": 3,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "26fac49d1f498eb4",
+        "type": "ui_group",
+        "name": "PRESSURE",
+        "tab": "dashboard-tab",
+        "order": 4,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "charts",
+        "type": "ui_group",
+        "name": "FLOW",
+        "tab": "dashboard-tab",
+        "order": 5,
+        "disp": true,
+        "width": 18,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "4813db82ad1b7894",
+        "type": "ui_tab",
+        "name": "Hydrogen Apparatus V3",
+        "icon": "dashboard",
+        "order": 6,
+        "disabled": false,
+        "hidden": true
+    },
+    {
+        "id": "dashboard-tab",
+        "type": "ui_tab",
+        "name": "Hydrogen Apparatus Monitoring",
+        "icon": "fa-fire",
+        "order": 2,
+        "disabled": true,
+        "hidden": true
+    }
+]
