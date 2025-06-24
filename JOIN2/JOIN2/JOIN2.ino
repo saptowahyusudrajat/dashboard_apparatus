@@ -32,8 +32,8 @@ int filtered_sum = 0;
 int sample_counter = 0;
 unsigned long last_sample_time = 0;
 
-// Pressure sensor parameters (-1.01 to 55.2 bar for 4-20 mA)
-const float BAR_MIN = -1.01;
+// Pressure sensor parameters (0 to 55.2 bar for 4-20 mA)
+const float BAR_MIN = 0;
 const float BAR_MAX = 55.2;
 const float mA_MIN = 4.0;
 const float mA_MAX = 20.0;

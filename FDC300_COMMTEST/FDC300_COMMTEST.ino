@@ -42,14 +42,14 @@ void setup() {
   // Optional: test communication
   testCommunication();
 
-  // Set initial flow rate (example: 1000.0 SCCM)
-  setFlowRate(3.0);
+  // Set initial flow rate (example: 1000.0 slpm)
+  setFlowRate(5.0);
 }
 
 void loop() {
   readActualFlowRate();
-  checkWarningCode(); // Add this
-  delay(3000); // Read every 3 seconds
+  //checkWarningCode(); // Add this
+  delay(1000); // Read every 3 seconds
 }
 
 void testCommunication() {
@@ -95,9 +95,9 @@ void readActualFlowRate() {
     floatConverter.b[2] = node.getResponseBuffer(1) & 0xFF;
     floatConverter.b[3] = (node.getResponseBuffer(1) >> 8) & 0xFF;
 
-    Serial.print("📊 Actual Flow Rate: ");
-    Serial.print(floatConverter.f, 2);
-    Serial.println(" SCCM");
+   // Serial.print("📊 Actual Flow Rate: ");
+    Serial.println(floatConverter.f, 2);
+    //Serial.println(" SCCM");
   } else {
     Serial.print("⚠️ Error reading flow rate. Code: 0x");
     Serial.println(result, HEX);
